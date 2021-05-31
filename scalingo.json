@@ -1,0 +1,35 @@
+{
+  "name": "Nocodb",
+  "description": "Nocodb",
+  "logo": "https://www.nocodb.com/brand/x1.png",
+  "repository": "https://github.com/MTES-MCT/nocodb-buildpack",
+  "website": "https://nocodb.com",
+  "env": {
+    "BUILDPACK_URL": {
+      "description": "Buildpack used to deploy Nocodb",
+      "value": "https://github.com/MTES-MCT/nocodb-buildpack#main",
+      "required": true
+    },
+    "NODEJS_VERSION": {
+      "description": "nodejs version",
+      "value": "14.7.0",
+      "required": false
+    },
+    "NC_DB": {
+      "description": "nocodb db url",
+      "value": "",
+      "required": false
+    },
+    "MAX_METASPACE_SIZE": {
+      "description": "Control max memory available",
+      "value": "512m"
+    }
+  },
+  "addons": ["postgresql:postgresql-sandbox"],
+  "formation": {
+    "web": {
+      "amount": 1,
+      "size": "S"
+    }
+  }
+}

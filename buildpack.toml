@@ -1,0 +1,12 @@
+[buildpack]
+name = "Nocodb"
+
+  [publish.Ignore]
+  files = [
+    ".gitignore",
+    "Dockerfile",
+    "docker-compose.yml",
+    "init-user-db",
+    ".env.sample",
+    ".env"
+  ]

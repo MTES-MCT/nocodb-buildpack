@@ -1,0 +1,49 @@
+#!/bin/bash
+# usage: bin/compile <build-dir> <cache-dir> <env-dir>
+
+set -eo pipefail
+
+BUILD_DIR=${1:-}
+CACHE_DIR=${2:-}
+ENV_DIR=${3:-}
+buildpack="$(cd -P "$(dirname "$0")" && pwd)"
+
+source "${buildpack}/common.sh"
+
+if [ -n "$BUILDPACK_DEBUG" ]; then
+  set -x
+fi
+
+NOCODB_PATH="$BUILD_DIR/nocodb"
+TMP_PATH="$BUILD_DIR/tmp"
+mkdir -p "${BUILD_DIR}/bin" "${CACHE_DIR}/dist" "${TMP_PATH}"
+export PATH="$BUILD_DIR/bin:$PATH"
+
+STACK="${STACK:-scalingo-18}"
+
+start "Install Nocodb"
+
+if [ -d "${NOCODB_PATH}" ]; then
+  warn "Nocodb is already installed"
+  rm -rf /app/nocodb/
+  warn "Old Nocodb installation is removed"
+fi
+info "Fresh new Nocodb installation"
+if [[ -f "${ENV_DIR}/NODEJS_VERSION" ]]; then
+  NODEJS_VERSION=$(cat "${ENV_DIR}/NODEJS_VERSION")
+else
+  NODEJS_VERSION=14.7.0
+fi
+install_nodejs "${NODEJS_VERSION}" | indent
+install_nocodb
+finished
+
+start "Building run"
+cp "${buildpack}/run.sh" "${NOCODB_PATH}/run"
+chmod +x "${NOCODB_PATH}/run"
+finished
+
+step "Cleaning up tmp files"
+rm -rf "${TMP_PATH}"
+
+finished
