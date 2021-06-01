@@ -7,7 +7,7 @@
   "env": {
     "BUILDPACK_URL": {
       "description": "Buildpack used to deploy Nocodb",
-      "value": "https://github.com/MTES-MCT/nocodb-buildpack#main",
+      "value": "https://github.com/MTES-MCT/nocodb-buildpack#master",
       "required": true
     },
     "NODEJS_VERSION": {
